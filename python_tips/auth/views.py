@@ -1,48 +1,47 @@
-from django.shortcuts import render
-from django.shortcuts import render
+
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import mixins
-from rest_framework import generics
-from rest_framework.decorators import (
-    api_view,
-    authentication_classes,
-    permission_classes
-)
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework import permissions
-from .permissions import IsOwnerOrReadOnly, IsOwner
-from django.conf import settings
-from django.db.models import Q
+from rest_framework.generics import GenericAPIView
+from .serializers import GoogleSocialAuthSerializer, TwitterAuthSerializer, FacebookSocialAuthSerializer
 
-from . models import *
 
-# Create your views here.
+class GoogleSocialAuthView(GenericAPIView):
 
-class GetAllTweets(generics.ListAPIView):
-    """
-    GETS ALL PYTHON TIPS SAVE TO DATABASE IN ORDER OF POPULARITY
+    serializer_class = GoogleSocialAuthSerializer
 
-    ARGS:
-            ORDERED BY AMMOUNTS OF LIKES
-    """
+    def post(self, request):
+        """
+        POST with "auth_token"
+        Send an idtoken as from google to get user information
+        """
 
-    serializer_class= TweetsSerializers
-    lookup = 'slug'
-    permission_classes = []
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = ((serializer.validated_data)['auth_token'])
+        return Response(data, status=status.HTTP_200_OK)
 
-    def get_queryset(self):
-        slug =  self.request.GET.get("slug")
-        qs = Tweets.objects.all()
-        
-        if slug is not None:
-            or_lookup = (
-                Q(tips__icontains=slug) |
-                Q(tags_icontains=slug))
-            qs = qs.filter(or_lookup).distinct().order_by('likes')
-            return qs
-        return qs.order_by('likes')
 
-class 
-    
+class FacebookSocialAuthView(GenericAPIView):
+
+    serializer_class = FacebookSocialAuthSerializer
+
+    def post(self, request):
+        """
+        POST with "auth_token"
+        Send an access token as from facebook to get user information
+        """
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = ((serializer.validated_data)['auth_token'])
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class TwitterSocialAuthView(GenericAPIView):
+    serializer_class = TwitterAuthSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+© 2021 GitHub, Inc.
