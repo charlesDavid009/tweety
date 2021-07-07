@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'pillow',
     'oauth2',
     'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
