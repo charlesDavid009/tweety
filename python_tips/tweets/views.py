@@ -17,6 +17,7 @@ from django.conf import settings
 from django.db.models import Q
 
 from . models import *
+from . serializers import *
 import tweepy
 import twitter
 import os
