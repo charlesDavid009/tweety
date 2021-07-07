@@ -157,6 +157,7 @@ class CreateTweets(generics.CreateAPIView):
                 link = tweet.link
                 likes = tweet.favorite_counts
                 retweet = tweet.retweet_counts
+                tweet_id = tweet.id
             )
             serializer.save()
 
@@ -178,3 +179,29 @@ class SearchTweetView(viewss.ListAPIView):
 
     def get_queryset(self):
         serializer
+
+class RetweetTweepyView(generics.CreateAPIView):
+    """
+    GETS THE TWEET ID OF THE OBJECTS AND RETWEETS THAT TWEETS THROUGH 
+    AUTHENTICATED USER ACCOUNT USING THE TWEEPY RETWEET FUNCTIONALITY
+
+    ARGS:
+            TWEET'S ID 
+            USER ID
+    """
+    serializer_class = RetweetSerializers
+
+    def post(self):
+        tweet_id = self.request.get('tweets_id')
+
+        consumer_api_key = os.environ.get('TWITTER_API_KEY')
+        consumer_api_secret_key = os.environ.get('TWITTER_CONSUMER_SECRET')
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
+        api = tweepy.API(auth)
+
+        status = api.retweet(tweet_id)
+        if status == '200' or status == "201":
+            return Response({'Tweets has been successfully been tweeted'}, status = status.HTTP_200_OK)
+        return status.error
+

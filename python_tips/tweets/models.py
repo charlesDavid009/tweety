@@ -3,7 +3,10 @@ from django.db import models
 # Create your models here.
 
 class Tweets(models.Model):
-    "craeting model to save tweets gotten from the apis to the database"
+    """
+    craeting model to save tweets gotten from the apis to the database
+    """
+    tweet_id = models.IntegerField(blank=False, null = False)
     who_posted = models.CharField(blank= False, null= False, max_length = 200)
     tips = models.TextField(blank=False, null= False)
     save_to_database = models.DateTimeField(auto_now_add= True)
