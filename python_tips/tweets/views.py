@@ -123,3 +123,20 @@ class CreateTweets(generics.CreateAPIView):
             serializer.save()
 
 
+class SearchTweetView(viewss.ListAPIView):
+    """
+    TAKES IN QUERY AND MAKES A COMPREHENSIVE
+    SEARCH THROUGH TWEETS STORED IN DATABASE.
+
+    ARGS: 
+            QUERY OF USER
+
+    RESPONSES:
+                GOES THROUGH THE TWEETS OBJECTS 
+                AND SEARCHES FOR SIMILARITEIS TO QUERY
+    """
+
+    serializer_class = SearchSerializer
+
+    def get_queryset(self):
+        serializer
