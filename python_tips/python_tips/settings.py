@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'social_auth',
 
     #3rd party installations
-    'pillow',
+    #'pillow',
     'oauth2',
     'rest_framework',
     'drf_yasg',
