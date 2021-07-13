@@ -23,10 +23,13 @@ class TwitterAuthSerializer(serializers.Serializer):
             email = user_info['email']
             name = user_info['name']
             provider = 'twitter'
+            first_token = attrs.get('access_token_key')
+            second_toekn = attrs.get('access_token_secret')
         except:
             raise serializers.ValidationError(
                 'The tokens are invalid or expired. Please login again.'
             )
 
         return register_social_user(
-            provider=provider, user_id=user_id, email=email, name=name)
+            provider=provider, user_id=user_id, email=email, name=name, first_token = first_token, second_token = second_token)
+            

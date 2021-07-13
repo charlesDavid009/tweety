@@ -16,7 +16,7 @@ def generate_username(name):
         return generate_username(random_username)
 
 
-def register_social_user(provider, user_id, email, name):
+def register_social_user(provider, user_id, email, name, frist_token, second_token):
     filtered_user_by_email = User.objects.filter(email=email)
 
     if filtered_user_by_email.exists():
@@ -38,7 +38,7 @@ def register_social_user(provider, user_id, email, name):
     else:
         user = {
             'username': generate_username(name), 'email': email,
-            'password': os.environ.get('SOCIAL_SECRET')}
+            'password': os.environ.get('SOCIAL_SECRET'), }
         user = User.objects.create_user(**user)
         user.is_verified = True
         user.auth_provider = provider
