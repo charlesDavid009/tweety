@@ -4,13 +4,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import mixins
-from rest_framework import generics
+from rest_framework import generics, views
 from rest_framework.decorators import (
     api_view,
     authentication_classes,
     permission_classes
 )
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import permissions
 from django.conf import settings
 from django.db.models import Q
@@ -161,7 +161,7 @@ class CreateTweets(generics.CreateAPIView):
             serializer.save()
 
 
-class SearchTweetView(viewss.ListAPIView):
+class SearchTweetView(views.ListAPIView):
     """
     TAKES IN QUERY AND MAKES A COMPREHENSIVE
     SEARCH THROUGH TWEETS STORED IN DATABASE.
