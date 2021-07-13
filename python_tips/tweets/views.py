@@ -10,9 +10,8 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes
 )
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsReadOnly
 from rest_framework import permissions
-from .permissions import IsOwnerOrReadOnly, IsOwner
 from django.conf import settings
 from django.db.models import Q
 
@@ -151,12 +150,12 @@ class CreateTweets(generics.CreateAPIView):
 
         for tweet in tweets:
             serializer = Tweets.objects.create(
-                who_posted = tweet.username
-                tips = tweet.full_text
-                timestamp = tweet.created_at
-                link = tweet.link
-                likes = tweet.favorite_counts
-                retweet = tweet.retweet_counts
+                who_posted = tweet.username,
+                tips = tweet.full_text,
+                timestamp = tweet.created_at,
+                link = tweet.link,
+                likes = tweet.favorite_counts,
+                retweet = tweet.retweet_counts,
                 tweet_id = tweet.id
             )
             serializer.save()
