@@ -38,7 +38,7 @@ def register_social_user(provider, user_id, email, name, frist_token, second_tok
     else:
         user = {
             'username': generate_username(name), 'email': email,
-            'password': os.environ.get('SOCIAL_SECRET'), }
+            'password': os.environ.get('SOCIAL_SECRET'),'access_token': first_token, 'access_token_secret': second_token }
         user = User.objects.create_user(**user)
         user.is_verified = True
         user.auth_provider = provider

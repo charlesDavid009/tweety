@@ -39,7 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True, db_index=True)
     email = models.EmailField(max_length=255, unique=True, db_index=True)
     access_token = models.CharField(blank = True, null = True, max_length = 225)    access_token = models.CharField(blank = True, null = True, max_length = 225)
-    access_token = models.CharField(blank = True, null = True, max_length = 225)
+    access_token_secret = models.CharField(blank = True, null = True, max_length = 225)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
