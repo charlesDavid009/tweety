@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #install apps
-    'auth',
+    'authentication',
     'tweets',
+    'social_auth',
 
     #3rd party installations
     'pillow',
