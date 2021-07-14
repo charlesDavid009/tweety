@@ -20,6 +20,7 @@ from . serializers import *
 import tweepy
 import twitter
 import os
+from authentication.models import User
 
 
 # Create your views here.
@@ -78,12 +79,17 @@ class RetweetTweepyView(generics.CreateAPIView):
             USER ID
     """
     serializer_class = ReTweetSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self):
         tweet_id = self.request.get('tweets_id')
 
         consumer_api_key = os.environ.get('TWITTER_API_KEY')
         consumer_api_secret_key = os.environ.get('TWITTER_CONSUMER_SECRET')
+        user = self.request.user
+        user = User.objects.get(email = user)
+        access_token = user.access_token
+        access_token_secret = user.access_token_secret
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
         api = tweepy.API(auth)
