@@ -39,3 +39,10 @@ class TwitterAuthSerializer(serializers.Serializer):
     """Handles serialization of twitter related data"""
     access_token_key = serializers.CharField()
     access_token_secret = serializers.CharField()
+
+class ReTweetSerializer(serializers.Serializer):
+    """
+    A FORM FIELD THAT TAKES IN THE ID OF THE TWEET 
+    POST AND AND THE DEFAULT ACTION WHICH IS RETWEET
+    """
+    tweets_id = serializers.IntegerField(required = True)
