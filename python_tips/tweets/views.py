@@ -39,7 +39,7 @@ class GetAllTweets(generics.ListAPIView):
     def get_queryset(self):
         slug =  self.request.GET.get("slug")
         qs = Tweets.objects.all()
-        
+
         if slug is not None:
             or_lookup = (
                 Q(tips__icontains=slug) |
@@ -48,117 +48,6 @@ class GetAllTweets(generics.ListAPIView):
             return qs
         return qs.order_by('likes')
 
-
-def authentication(access_token_key, access_token_secret):
-    """
-    validate_twitter_auth_tokens methods and helps tweepy access user's account
-    """
-
-    consumer_api_key = os.environ.get('TWITTER_API_KEY')
-    consumer_api_secret_key = os.environ.get('TWITTER_CONSUMER_SECRET')
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-    api = tweepy.API(auth)
-    return api
-
-def get_tweets():
-    api = authentication(access_token_key, access_token_secret)
-    userID= 'python_tip'
-
-    tweets = api.user_timeline(screen_name=userID, 
-                            # 200 is the maximum allowed count
-                            count=200,
-                            include_rts = False,
-                            # Necessary to keep full_text 
-                            # otherwise only the first 140 words are extracted
-                            tweet_mode = 'extended'
-                            )
-
-    all_tweets = []
-    all_tweets.extend(tweets)
-    oldest_id = tweets[-1].id
-    while True:
-        tweets = api.user_timeline(screen_name=userID, 
-                            # 200 is the maximum allowed count
-                            count=200,
-                            include_rts = False,
-                            max_id = oldest_id - 1,
-                            # Necessary to keep full_text 
-                            # otherwise only the first 140 words are extracted
-                            tweet_mode = 'extended'
-                            )
-        if len(tweets) == 0:
-            break
-        oldest_id = tweets[-1].id
-        all_tweets.extend(tweets)
-        return all_tweets
-
-
-
-
-class CreateTweets(generics.CreateAPIView):
-    """
-    GETS TWEETS FROM API AND SAVE TO DATABASE
-
-    ARGS: 
-            USER MUST BE AUTHENTICATED 
-
-    PARAMETERS:
-                ALL FORM MODELS 
-    """
-
-    serializer_class = TwitterAuthSerializer
-
-    def create(self):
-        access_token= self.request.get('access_token_key')
-        access_token_secret = elf.request.get('access_token_secret')
-
-        consumer_api_key = os.environ.get('TWITTER_API_KEY')
-        consumer_api_secret_key = os.environ.get('TWITTER_CONSUMER_SECRET')
-        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        auth.set_access_token(access_token, access_token_secret)
-        api = tweepy.API(auth)
-
-        userID= 'python_tip'
-
-        tweets = api.user_timeline(screen_name=userID, 
-                                # 200 is the maximum allowed count
-                                count=200,
-                                include_rts = False,
-                                # Necessary to keep full_text 
-                                # otherwise only the first 140 words are extracted
-                                tweet_mode = 'extended'
-                                )
-
-        all_tweets = []
-        all_tweets.extend(tweets)
-        oldest_id = tweets[-1].id
-        while True:
-            tweets = api.user_timeline(screen_name=userID, 
-                                # 200 is the maximum allowed count
-                                count=200,
-                                include_rts = False,
-                                max_id = oldest_id - 1,
-                                # Necessary to keep full_text 
-                                # otherwise only the first 140 words are extracted
-                                tweet_mode = 'extended'
-                                )
-            if len(tweets) == 0:
-                break
-            oldest_id = tweets[-1].id
-            all_tweets.extend(tweets)
-
-        for tweet in tweets:
-            serializer = Tweets.objects.create(
-                who_posted = tweet.username,
-                tips = tweet.full_text,
-                timestamp = tweet.created_at,
-                link = tweet.link,
-                likes = tweet.favorite_counts,
-                retweet = tweet.retweet_counts,
-                tweet_id = tweet.id
-            )
-            serializer.save()
 
 """
 class SearchTweetView(views.ListAPIView):
