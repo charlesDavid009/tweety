@@ -40,6 +40,28 @@ class GetAllTweets(generics.ListAPIView):
     def get_queryset(self):
         slug =  self.request.GET.get("slug")
         qs = Tweets.objects.all()
+        return qs.order_by('likes')
+
+class SearchTweetView(views.ListAPIView):
+    """
+    TAKES IN QUERY AND MAKES A COMPREHENSIVE
+    SEARCH THROUGH TWEETS STORED IN DATABASE.
+
+    ARGS: 
+            QUERY OF USER
+
+    RESPONSES:
+                GOES THROUGH THE TWEETS OBJECTS 
+                AND SEARCHES FOR SIMILARITEIS TO QUERY
+    """
+
+    serializer_class = SearchSerializer
+    lookup = 'slug'
+    permission_classes = []
+
+    def get_queryset(self):
+        slug =  self.kwargs.get("slug")
+        qs = Tweets.objects.all()
 
         if slug is not None:
             or_lookup = (
@@ -48,27 +70,6 @@ class GetAllTweets(generics.ListAPIView):
             qs = qs.filter(or_lookup).distinct().order_by('likes')
             return qs
         return qs.order_by('likes')
-
-
-"""
-class SearchTweetView(views.ListAPIView):
-
-    #TAKES IN QUERY AND MAKES A COMPREHENSIVE
-    #SEARCH THROUGH TWEETS STORED IN DATABASE.
-
-    #ARGS: 
-    #        QUERY OF USER
-
-    #RESPONSES:
-                #GOES THROUGH THE TWEETS OBJECTS 
-                #AND SEARCHES FOR SIMILARITEIS TO QUERY
-    
-
-    serializer_class = SearchSerializer
-
-    def get_queryset(self):
-        serializer
-"""
 class RetweetTweepyView(generics.CreateAPIView):
     """
     GETS THE TWEET ID OF THE OBJECTS AND RETWEETS THAT TWEETS THROUGH 
