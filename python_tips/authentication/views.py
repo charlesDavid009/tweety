@@ -70,6 +70,9 @@ class LogoutAPIView(generics.GenericAPIView):
 
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        user = self.request.user
+        user = User.objects.get(email = user)
+        user.delete()
         serializer.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

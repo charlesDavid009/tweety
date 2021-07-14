@@ -77,7 +77,7 @@ class RetweetTweepyView(generics.CreateAPIView):
             TWEET'S ID 
             USER ID
     """
-    serializer_class = RetweetSerializer
+    serializer_class = ReTweetSerializer
 
     def post(self):
         tweet_id = self.request.get('tweets_id')
