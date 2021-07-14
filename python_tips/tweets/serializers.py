@@ -27,7 +27,7 @@ class TweetsSerializers(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SearchSerailizers(serializers.Serializer):
+class SearchSerializer(serializers.Serializer):
     """
     TAKES IN USER QUERY ARGUMENTS AND SUPPLYS IT TO THE
     VIEW FUNCTION FOR COMPREHENSIVE DATABASE SEARCH FOR SIMILARITIES 

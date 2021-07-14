@@ -42,7 +42,7 @@ class GetAllTweets(generics.ListAPIView):
         qs = Tweets.objects.all()
         return qs.order_by('likes')
 
-class SearchTweetView(views.ListAPIView):
+class SearchTweetView(generics.RetrieveAPIView):
     """
     TAKES IN QUERY AND MAKES A COMPREHENSIVE
     SEARCH THROUGH TWEETS STORED IN DATABASE.
